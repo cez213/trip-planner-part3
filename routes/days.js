@@ -1,6 +1,6 @@
 var dayRouter = require('express').Router();
 var Day = require('../models').Day;
-var attractionRouter = require('./index'); //require('express').Router();
+var attractionRouter = require('express').Router({mergeParams: true});
 
 
 // GET /days
@@ -8,6 +8,7 @@ dayRouter.get('/', function (req, res, next){
 	// serves up all days as json
 	Day
 		.find({})
+		.populate('hotel restaurants thingsToDo')
 		.exec(function (err, days){
 			if(err) return next(err);
 			res.json(days);
@@ -51,14 +52,41 @@ dayRouter.use('/:id', attractionRouter);
 // POST /days/:id/hotel
 attractionRouter.post('/hotel', function (req, res, next) {
     // creates a reference to the hotel
+	Day.findById(req.params.id)
+		.exec(function(err, day){
+			day.hotel = req.body._id;
+			day.save(function(err, day){
+				if(err) return next(err);
+				res.json(day);
+			})
+		})
+
 });
 // DELETE /days/:id/hotel
 attractionRouter.delete('/hotel', function (req, res, next) {
     // deletes the reference of the hotel
+
+	Day.findById(req.params.id)
+	.exec(function(err, day){
+		day.hotel = null;
+		day.save(function(err, day){
+			if(err) return next(err);
+			res.json(day);
+		})
+	})
 });
 // POST /days/:id/restaurants
 attractionRouter.post('/restaurants', function (req, res, next) {
     // creates a reference to a restaurant
+	Day.findById(req.params.id)
+		.exec(function(err, day){
+			day.restaurants = req.body._id;
+			day.save(function(err, day){
+				if(err) return next(err);
+				res.json(day);
+			})
+		})
+
 });
 // DELETE /days/:dayId/restaurants/:restId
 attractionRouter.delete('/restaurant/:id', function (req, res, next) {

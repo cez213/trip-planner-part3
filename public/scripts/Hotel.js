@@ -12,12 +12,23 @@ $(document).ready(function () {
 		if (currentDay.hotel) {
 			currentDay.hotel.delete();
 		}
-		// when generateAttraction is called, it calls all these methods
+		
+		// $.post('/days/'+currentDay._id+'/hotel', {_id: this._id}, function(data){
+		// 	data.buildMarker()
+		// 		.drawMarker()
+		// 		.buildItineraryItem()
+		// 		.drawItineraryItem();
+		// 	currentDay.hotel = data; 
+		// console.log('POST from attraction', data);
+		// })
+
+		// })
 		this.buildMarker()
 			.drawMarker()
 			.buildItineraryItem()
 			.drawItineraryItem();
 		currentDay.hotel = this; // stores currentDay hotel
+		// when generateAttraction is called, it calls all these methods
 	}
 	//draw map markers
 	Hotel.prototype = generateAttraction({
@@ -33,5 +44,6 @@ $(document).ready(function () {
 			.eraseMarker()
 			.eraseItineraryItem();
 		currentDay.hotel = null;
+		deleteHotelRef(currentDay);
 	};
 });

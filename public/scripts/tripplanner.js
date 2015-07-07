@@ -8,21 +8,26 @@ function eachKeyValue (obj, onEach) {
 // getting day - not doing much
 var getAllDays = function (){
 	$.get('/days', function(data){
+		console.log('GET response data', data);
 		for (var i = 0; i < data.length; i++) {
 			// create new day for each day in database
 			var day = new Day();
 			// set id for new day
 			day._id = data[i]._id;
+			if (data[i].hotel !== null && data[i].hotel) {
+				console.log('hotel:', data[i])
+				day.hotel = data[i].hotel.name;
+			}
+			console.log(day)
+
 		}
-		console.log('GET response data', data);
 	})
 }
 
 // get day by id -> takes currentDay to get id
 var getDayById = function(currentDay){
-	var id = currentDay._id;
-	$.get('/days/'+id, function(data){
-		console.log('GET id response data', data);
+	$.get('/days/'+currentDay._id, function(data){
+		// console.log('GET id response data', data);
 	})
 }
 
@@ -36,12 +41,29 @@ var postNewDay = function(cb){
 
 // takes previousDay to get id (called in Day.js)
 var deleteDayById = function(previousDay){
-	var id = previousDay._id;
 	$.ajax({
-		url: '/days/'+id,
+		url: '/days/'+previousDay._id,
 		type: 'DELETE',
 		success: function(data){
 			console.log('DELETE reponse data', data);
+		}
+	})
+}
+
+var addAttraction = function(currentDay, attractionType, attraction){
+	$.post('/days/'+currentDay._id+'/'+attractionType, {_id: attraction._id}, function(data){
+		//cb(data);
+		console.log('POST from attraction', data);
+	})
+}
+
+var deleteHotelRef = function(currentDay){
+
+	$.ajax({
+		url: '/days/'+currentDay._id+'/hotel',
+		type: 'DELETE',
+		success: function(data){
+			console.log('DELETE hotel reponse data', data);
 		}
 	})
 }

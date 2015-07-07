@@ -6,8 +6,11 @@ $(document).ready(function () {
 		config.$all.find('.add').on('click', function () {
 			// attraction is the hotel/restaurant/thing object, depending on what is selected
 			var attraction = config.$all.find(':selected').data(); //.data() gets the data
+			// find attraction type by data tag
+			var attractionType = $(this).data('buttonclicked');
 			//create a new attraction object
 			new config.constructor(attraction);
+			addAttraction(currentDay, attractionType, attraction);
 		});
 		//passes data for all names in drop down menu
 		config.all.forEach(function (attraction) {
