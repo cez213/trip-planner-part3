@@ -57,6 +57,7 @@ $(document).ready(function () {
 		
 		// update currentDay, so that is it up to date for other functions
 		currentDay = this;
+		getDayById(currentDay);
 	};
 
 	function deleteCurrentDay () {
@@ -70,11 +71,15 @@ $(document).ready(function () {
 			});
 			newCurrent.switchTo();
 			previousDay.eraseButton();
+			deleteDayById(previousDay);
 		}
 	};
 
 	$('#add-day').on('click', function () {
-		new Day();
+		var day = new Day();
+		postNewDay(function(data){
+			day._id = data._id;
+		});
 	});
 
 	$('#day-title > .remove').on('click', deleteCurrentDay);

@@ -7,7 +7,7 @@ $(document).ready(function () {
 			// attraction is the hotel/restaurant/thing object, depending on what is selected
 			var attraction = config.$all.find(':selected').data(); //.data() gets the data
 			//create a new attraction object
-			new config.constructor(attraction); 
+			new config.constructor(attraction);
 		});
 		//passes data for all names in drop down menu
 		config.all.forEach(function (attraction) {
